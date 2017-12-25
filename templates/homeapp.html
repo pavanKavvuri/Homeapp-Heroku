@@ -1,0 +1,98 @@
+ <!doctype html>
+<html lang="en">
+  <head>
+    <title>Hello, world!</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+         <link href="../static/css/plugins/bootstrap.min.css" rel="stylesheet" />   
+         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+ 
+  </head>
+  <body>
+
+    <script src = "../static/js/plugins/jquery.min.js"></script>
+    <!--script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+     
+    <h1>Hello, world!</h1>
+
+    <h4>AC <input id="AC" type="checkbox" data-toggle="toggle"></h4>
+    <h4>Refridgerator <input id="RF" type="checkbox" data-toggle="toggle"></h4>
+    <h4>Geyser <input id="GS" type="checkbox" data-toggle="toggle"></h4>
+    <h4>Light 1 <input id="L1" type="checkbox" data-toggle="toggle"></h4>
+    <h4>Light 2 <input id="L2" type="checkbox" data-toggle="toggle"></h4>
+
+    <p>Temperature: <span id = "tmp">temperature</span></p>
+    <p>Humidity: <span id = "hum">humidity</span></p>
+
+     <script>  
+
+                $(function() {
+                   
+                  if({{AC}}){
+                    $('#AC').bootstrapToggle('on')
+                  }
+                  if({{GS}}){
+                    $('#GS').bootstrapToggle('on')
+                  }
+                  if({{RF}}){
+                    $('#RF').bootstrapToggle('on')
+                  }
+                  if({{L1}}){
+                    $('#L1').bootstrapToggle('on')
+                  }
+                  if({{L2}}){
+                    $('#L2').bootstrapToggle('on')
+                  }
+
+                  
+
+                    $('#AC,#RF,#GS,#L1,#L2').change(function() {
+                       let state1 = $(this).prop('checked');
+                       //alert( "First handler for .toggle() called." );
+                       let ID = this.id;
+                       
+                      //alert(this.id);
+                   
+                       $.ajax({
+                                type: "POST",
+                                url: "/slides",
+                                data: {'state':state1,'ID':ID}, 
+                                dataType: "json",
+                                success: function(){
+                                    //alert("Success"); 
+                                }
+                                });  
+
+                    
+                    })
+                })
+</script>
+
+<script>
+                $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+                    (function(){
+                        $.getJSON(
+                            $SCRIPT_ROOT+"/dummy", // Your AJAX route here
+                            function(data) {
+                               console.log(data);
+                               document.getElementById("tmp").innerHTML = data.temp;
+                               document.getElementById("hum").innerHTML = data.hum;
+                            }
+                        );
+                        setTimeout(arguments.callee, 2000);
+                    })();
+
+
+
+</script>
+
+
+</body>
+</html>
