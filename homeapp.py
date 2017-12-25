@@ -19,6 +19,7 @@ def dataGet(temp, hum):
         tmp['Temperature'] = temp
         tmp['Humidity'] = hum
     except Exception as e1:
+        print ("Hello")
         print (str(e1))
     
 
